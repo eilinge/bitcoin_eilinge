@@ -60,7 +60,7 @@ func (pow *ProofOfWork) Run() (int, []byte) {
 		hash = sha256.Sum256(data)
 
 		fmt.Printf("\r%x", hash)
-		// hash conevt int
+		// hash convert int
 		hashInt.SetBytes(hash[:])
 
 		// hashInt == pow.target
