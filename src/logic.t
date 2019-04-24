@@ -1,6 +1,5 @@
 entry
     coin/main
-
 call
     core
         block

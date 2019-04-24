@@ -7,45 +7,50 @@ import (
 	"time"
 )
 
-//Block :block struct
+/*
+1. NewBlock(string, []byte) (Block)  // Block.Hash = []byte{}
+2. Block.setHash()
+1. NewGenesisBlock() (GenesisBlock)
+*/
+
+// Block struct
 type Block struct {
-	Timestamp     int64
+	TimeStamp     int64
 	Data          []byte
 	PrevBlockHash []byte
 	Hash          []byte
-	Nonce         int // 证明工作量
+	Nonce         int
 }
 
-//NewBlock :genertor a new block
-func NewBlock(data string, prevBlockHash []byte) *Block {
+// NewBlock ...
+func NewBlock(data string, prevblockHash []byte) *Block {
 	block := &Block{
-		Timestamp:     time.Now().Unix(),
+		TimeStamp:     time.Now().Unix(), // int64
 		Data:          []byte(data),
-		PrevBlockHash: prevBlockHash,
+		PrevBlockHash: prevblockHash, // []byte
 		Hash:          []byte{},
 	}
-
-	pow := NewProofOfWork(block)
-	nonce, hash := pow.Run()
-
-	// block.Hash = block.SetHash()
 	// block.SetHash()
-	block.Hash = hash[:]
-	block.Nonce = nonce
+	// get hash of current block
+	pow := NewProofOfWork(block)
+	block.Hash, block.Nonce = pow.Run()
 	return block
 }
 
-//SetHash :genertor block hash by sha256
-func (b *Block) SetHash() {
-	timestamp := []byte(strconv.FormatInt(b.Timestamp, 10))
+// SetHash ...
+func (b *Block) SetHash() []byte {
+	// FormatInt func(i int64, base int) string
+	timestamp := []byte(strconv.FormatInt(b.TimeStamp, 10))
+	// Join func(s [][]byte, sep []byte) []byte
 	headers := bytes.Join([][]byte{b.PrevBlockHash, b.Data, timestamp}, []byte{})
-	// hash [...]byte
+	// Sum256 func(data []byte) [Size]byte
 	hash := sha256.Sum256(headers)
+	// ([Size]byte[:]) []byte
 	b.Hash = hash[:]
-	// return b.Hash
+	return b.Hash
 }
 
-//NewgenesisBlock :create and returns genesis block
-func NewgenesisBlock() *Block {
-	return NewBlock("Genesis Block", []byte{})
+// NewGenesisBlock ...
+func NewGenesisBlock() *Block {
+	return NewBlock("create genesisBlock", []byte{})
 }

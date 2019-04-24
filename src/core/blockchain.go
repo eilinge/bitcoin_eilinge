@@ -1,18 +1,22 @@
 package core
 
-// Blockchain ...
-type Blockchain struct {
+// BlockChain ...
+/*
+1. NewBlockChain() (BlockChain)
+2. BlockChain.AddBlock()
+*/
+type BlockChain struct {
 	Blocks []*Block
 }
 
-//AddBlock :add new block to blockchain
-func (bc *Blockchain) AddBlock(data string) {
-	prevBlock := bc.Blocks[len(bc.Blocks)-1]
-	newBlock := NewBlock(data, prevBlock.Hash)
+// AddBlock ...
+func (bc *BlockChain) AddBlock(data string) {
+	preveBlock := bc.Blocks[len(bc.Blocks)-1]
+	newBlock := NewBlock(data, preveBlock.Hash)
 	bc.Blocks = append(bc.Blocks, newBlock)
 }
 
-//NewBlockchain :genesis a new Blockchain
-func NewBlockchain() *Blockchain {
-	return &Blockchain{[]*Block{NewgenesisBlock()}}
+// NewBlockChain ...
+func NewBlockChain() *BlockChain {
+	return &BlockChain{[]*Block{NewGenesisBlock()}}
 }
